@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/* Uni+ theme — the only place colours, fonts, radii and shadows are defined. */
+@theme {
+  --color-navy: #13294b;
+  --color-orange: #e8772e;
+  --color-bg: #f7f8fb;
+  --color-card: #ffffff;
+  --color-ink-2: #3a4a66;
+  --color-line: #e3e7ef;
+  /* Very light tints used for selected states and badges (flat, no gradients). */
+  --color-navy-50: #eef1f7;
+  --color-orange-50: #fdf1e8;
+
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 20px;
+  --radius-sheet: 24px;
+
+  --shadow-soft: 0 1px 2px rgb(19 41 75 / 0.04), 0 8px 24px rgb(19 41 75 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(19 41 75 / 0.05), 0 16px 40px rgb(19 41 75 / 0.1);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* Bottom safe area for phones with a home indicator. */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
