@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState, Skeleton } from "@/components/ui/States";
 import { computeCompatibility } from "@/lib/compat";
 import { DEMO_MODE } from "@/lib/config";
+import { scheduleDemoOpener } from "@/lib/data/messages";
 import { listCandidates, useMyProfile } from "@/lib/data/profiles";
 import { consumeSwipe, hasSwipeLeft } from "@/lib/data/quota";
 import {
@@ -64,7 +65,10 @@ export default function DiscoverPage() {
   const onSwipe = useCallback(async (item: DeckItem, liked: boolean) => {
     if (!consumeSwipe()) return;
     const m = await recordSwipe(item.profile, liked).catch(() => null);
-    if (m) setMatch(m);
+    if (m) {
+      setMatch(m);
+      scheduleDemoOpener(m); // demo: they say hello first, a moment later
+    }
   }, []);
 
   // Like / pass from the expanded profile.

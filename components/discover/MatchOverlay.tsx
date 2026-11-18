@@ -61,8 +61,7 @@ export function MatchOverlay({ match, me, onClose }: { match: Match | null; me: 
           </p>
 
           <div className="mt-10 flex w-full flex-col gap-3">
-            {/* Chat arrives in step 4: this will become /messages/${match.id}. */}
-            <ButtonLink href="/matchs" className="h-14 w-full text-base">
+            <ButtonLink href={`/messages/${match.id}`} className="h-14 w-full text-base">
               <MessageCircle className="h-5 w-5" aria-hidden />
               {t.match.message}
             </ButtonLink>

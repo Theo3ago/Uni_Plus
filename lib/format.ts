@@ -57,6 +57,26 @@ export function formatShortDate(iso: string): string {
   }).format(d);
 }
 
+/** ISO timestamp → "14 h 05" (local time). */
+export function formatClock(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getHours()} h ${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+/** Same calendar day (local time). */
+export const sameDay = (a: string, b: string) => new Date(a).toDateString() === new Date(b).toDateString();
+
+/** "Aujourd'hui" / "Hier" / "12 nov." for chat day separators and list timestamps. */
+export function formatDayLabel(iso: string, today: string, yesterday: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  if (d.toDateString() === now.toDateString()) return today;
+  const y = new Date(now);
+  y.setDate(now.getDate() - 1);
+  if (d.toDateString() === y.toDateString()) return yesterday;
+  return formatShortDate(iso);
+}
+
 /** "2027-05-01" → "mai 2027" */
 export function formatMonth(iso: string): string {
   const [y, m] = iso.split("-").map(Number);

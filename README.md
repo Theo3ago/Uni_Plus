@@ -47,6 +47,27 @@ If the Supabase keys are missing, demo mode stays on automatically so the presen
 - **Fake checkout:** the test card `4242 4242 4242 4242` is prefilled. It is a simulation only: no payment provider, no network request, and the card values are never stored, sent or logged (see the header comment in `app/paiement/page.tsx`). Only the resulting swipe credits are saved.
 - When the deck is empty, « Revoir les profils passés » brings back the profiles you passed on.
 
+- **Chat:** a new match sends a first message about 2.5 s after « C'est un match ! ». When you write, they "read" it (✓✓ Lu), type, then reply within ~2–3 s. Replies react to keywords (budget, date, quartier, vidéo, ménage, s'engager…) using that profile's real data; otherwise they cycle through friendly canned answers (`lib/demo/replies.ts`).
+- **Unread badges** appear on the Messages tab and in the conversation list.
+
+### Video calls (Jitsi Meet)
+
+The video button in a chat opens `/appel/<match-id>`: a pre-call screen asks for camera and microphone permission,
+then embeds the Jitsi room in the app. The room name is derived from the match ID (in demo mode it is mixed with a
+random per-device value so strangers using the demo never land in the same public room).
+
+**For the live demo with a second device:** the pre-call screen shows a **QR code** and a « Copier le lien » button.
+Scan it with a second phone (or open the link on another computer) to join the same room.
+
+Things to know about the free public server `meet.jit.si`:
+
+- **The first participant must log in** (Google, GitHub…) for the meeting to start. Others then join without an account.
+  Do this once before the pitch, ideally from the second device via the QR link, so the room is already running.
+- Jitsi no longer supports embedding meet.jit.si in other sites, and **embedded calls may be cut after about 5 minutes**.
+  The « Nouvel onglet » link at the top of the call opens the same room directly on meet.jit.si, without that limit.
+- For production, set `NEXT_PUBLIC_JITSI_DOMAIN` to your own Jitsi server, or use Jitsi as a Service (JaaS, domain `8x8.vc`, free tier).
+- Camera access requires https (Vercel is https; `localhost` also works).
+
 ### Compatibility score
 
 `lib/compat.ts` uses a simple weighted formula (each factor 0–1):
