@@ -6,6 +6,7 @@
  */
 import { DEMO_MODE } from "../config";
 import { DEMO_PROFILES } from "../demo/profiles";
+import { dataUrlToBlob } from "../image";
 import { readStored, useStored, writeStored } from "../storage";
 import { getSupabase } from "../supabase/client";
 import type { Profile } from "../types";
@@ -74,12 +75,35 @@ export async function getMyProfile(): Promise<Profile | null> {
   return data ? fromRow(data as ProfileRow) : null;
 }
 
-export async function saveMyProfile(p: Profile): Promise<void> {
-  writeStored(ME_KEY, p); // local copy keeps the UI instant in both modes
-  if (DEMO_MODE) return;
+/** Uploads any new (data: URL) photos to Supabase Storage and returns public URLs. */
+async function persistPhotos(uid: string, photos: string[]): Promise<string[]> {
   const sb = getSupabase()!;
-  const { error } = await sb.from("profiles").upsert(toRow(p));
+  return Promise.all(
+    photos.map(async (src) => {
+      if (!src.startsWith("data:")) return src; // already uploaded
+      const blob = await dataUrlToBlob(src);
+      const path = `${uid}/${crypto.randomUUID()}.jpg`;
+      const { error } = await sb.storage.from("photos").upload(path, blob, { contentType: "image/jpeg" });
+      if (error) throw error;
+      return sb.storage.from("photos").getPublicUrl(path).data.publicUrl;
+    }),
+  );
+}
+
+export async function saveMyProfile(p: Profile): Promise<Profile> {
+  if (DEMO_MODE) {
+    const saved = { ...p, id: "me" };
+    writeStored(ME_KEY, saved);
+    return saved;
+  }
+  const sb = getSupabase()!;
+  const { data: auth } = await sb.auth.getUser();
+  if (!auth.user) throw new Error("not signed in");
+  const saved: Profile = { ...p, id: auth.user.id, photos: await persistPhotos(auth.user.id, p.photos) };
+  const { error } = await sb.from("profiles").upsert({ ...toRow(saved), updated_at: new Date().toISOString() });
   if (error) throw error;
+  writeStored(ME_KEY, saved); // local copy keeps the UI instant
+  return saved;
 }
 
 /** Everyone except me. Swipe filtering happens in the Discover feature. */

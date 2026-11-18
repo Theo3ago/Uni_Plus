@@ -34,6 +34,13 @@ use your browser's device toolbar at 390 px to see the phone layout.
 To use the real backend, set `NEXT_PUBLIC_DEMO_MODE=false` **and** fill in the Supabase keys.
 If the Supabase keys are missing, demo mode stays on automatically so the presentation can't break.
 
+### Demo tips for the presentation
+
+- **Onboarding shortcut:** on the first onboarding screen, « Remplir avec un profil exemple » creates a complete profile in one tap.
+- **Start over:** Profil → « Réinitialiser la démo » wipes everything stored in the browser and returns to onboarding.
+- Onboarding progress is saved after every change, so refreshing the page never loses answers.
+- Photos are compressed in the browser (max 900 px, JPEG) before being saved, so 4 photos fit easily in `localStorage`.
+
 ## 3. Editing text
 
 Every UI string lives in [`lib/strings.ts`](lib/strings.ts). Colours, fonts, radii and shadows live in
@@ -48,7 +55,15 @@ Every UI string lives in [`lib/strings.ts`](lib/strings.ts). Colours, fonts, rad
 3. **Project Settings → API**: copy the *Project URL* and *anon public* key into
    `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 4. **Authentication → URL Configuration**: set *Site URL* to your Vercel URL and add
-   `http://localhost:3000` to *Redirect URLs* (needed for email magic links).
+   both `https://<your-app>.vercel.app/auth/callback` and `http://localhost:3000/auth/callback`
+   to *Redirect URLs* (the email magic link lands there).
+5. **Authentication → Providers → Email**: keep *Email* enabled (magic link is the default).
+   Supabase's built-in email sender is rate-limited (a few emails per hour); for real use, add
+   your own SMTP under **Authentication → Emails → SMTP Settings**.
+
+Sign-in flow: `/connexion` sends the magic link → `/auth/callback` finishes sign-in →
+`/bienvenue` (onboarding) if the user has no profile yet, otherwise `/decouvrir`.
+Profile photos are uploaded to the `photos` bucket under `<user-id>/…` when the profile is saved.
 
 ## 5. Deploy to Vercel
 

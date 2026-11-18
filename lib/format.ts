@@ -33,6 +33,19 @@ export function formatDate(iso: string): string {
   return `${day} ${monthYear}`;
 }
 
+/** "23:30" → "23 h 30", "00:00" → "0 h" (Canadian French style). */
+export function formatTime(hhmm: string): string {
+  const [h, m] = hhmm.split(":").map(Number);
+  return m ? `${h} h ${String(m).padStart(2, "0")}` : `${h} h`;
+}
+
+/** Today's date as "YYYY-MM-DD" in the app timezone (America/Toronto). */
+export function todayIso(timeZone = "America/Toronto"): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(
+    new Date(),
+  );
+}
+
 /** "2027-05-01" → "mai 2027" */
 export function formatMonth(iso: string): string {
   const [y, m] = iso.split("-").map(Number);
