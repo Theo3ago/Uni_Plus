@@ -23,3 +23,6 @@ export const JITSI_DOMAIN = process.env.NEXT_PUBLIC_JITSI_DOMAIN || "meet.jit.si
 /** Free swipes per day (resets at midnight, America/Toronto). */
 export const FREE_SWIPES_PER_DAY = 12;
 export const APP_TIMEZONE = "America/Toronto";
+
+/** Monthly rent per person (CAD) range used by sliders and filters. */
+export const BUDGET_RANGE = { min: 400, max: 2000, step: 25 };

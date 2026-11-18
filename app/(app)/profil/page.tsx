@@ -3,7 +3,7 @@
 import { LogOut, Pencil, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { DemoBadge, PageHeader } from "@/components/layout/PageHeader";
-import { PhotoCarousel } from "@/components/profile/ProfileCard";
+import { PhotoCarousel } from "@/components/profile/PhotoCarousel";
 import { ProfileDetails } from "@/components/profile/ProfileDetails";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { DEMO_MODE } from "@/lib/config";

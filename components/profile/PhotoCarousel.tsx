@@ -1,10 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- photos are data: URLs or Supabase URLs */
-import { CalendarDays, GraduationCap, MapPin, Wallet } from "lucide-react";
 import { useState } from "react";
-import { formatBudget, formatMonth } from "@/lib/format";
-import { SCHOOLS } from "@/lib/schools";
 import { t } from "@/lib/strings";
 import type { Profile } from "@/lib/types";
 
@@ -74,47 +71,5 @@ export function CompatBadge({ score }: { score: number }) {
     <span className="inline-flex items-center gap-1 rounded-full bg-orange px-3 py-1.5 text-sm font-medium text-navy shadow-soft">
       {score} %<span className="font-medium">{t.discover.compatibility}</span>
     </span>
-  );
-}
-
-/** Summary card used in the Discover stack. */
-export function ProfileCard({ profile, score }: { profile: Profile; score?: number }) {
-  const school = SCHOOLS[profile.school];
-  return (
-    <article className="overflow-hidden rounded-[24px] bg-card shadow-lift" aria-label={profile.firstName}>
-      <div className="relative">
-        <PhotoCarousel profile={profile} className="aspect-[4/5] w-full" />
-        {score !== undefined ? (
-          <div className="pointer-events-none absolute bottom-3 left-3">
-            <CompatBadge score={score} />
-          </div>
-        ) : null}
-      </div>
-      <div className="space-y-3 p-5">
-        <h2 className="text-[26px] leading-tight text-navy">
-          {profile.firstName}, <span className="font-medium">{profile.age}</span>
-        </h2>
-        <ul className="space-y-1.5 text-[15px] text-ink-2">
-          <li className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 shrink-0" aria-hidden />
-            {school.short}
-          </li>
-          <li className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 shrink-0" aria-hidden />
-            <span className="truncate">
-              {profile.program} · {t.labels.year[profile.year]}
-            </span>
-          </li>
-          <li className="flex items-center gap-2">
-            <Wallet className="h-4 w-4 shrink-0" aria-hidden />
-            {formatBudget(profile.budget.min, profile.budget.max)} / mois
-          </li>
-          <li className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4 shrink-0" aria-hidden />
-            {t.discover.moveIn} : {formatMonth(profile.moveIn)}
-          </li>
-        </ul>
-      </div>
-    </article>
   );
 }

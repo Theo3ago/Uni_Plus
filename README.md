@@ -41,6 +41,28 @@ If the Supabase keys are missing, demo mode stays on automatically so the presen
 - Onboarding progress is saved after every change, so refreshing the page never loses answers.
 - Photos are compressed in the browser (max 900 px, JPEG) before being saved, so 4 photos fit easily in `localStorage`.
 
+- **Matches:** 11 of the 20 demo profiles have already "liked" you, so a right swipe on them shows « C'est un match ! ». Profiles are sorted by compatibility, so the best matches come first.
+- **Laptop controls:** ← passes, → likes (or click ✕ / ✓). Click a card to see the full profile.
+- **Swipe limit:** 12 free swipes per day, reset at midnight (America/Toronto). When they run out, the paywall opens.
+- **Fake checkout:** the test card `4242 4242 4242 4242` is prefilled. It is a simulation only: no payment provider, no network request, and the card values are never stored, sent or logged (see the header comment in `app/paiement/page.tsx`). Only the resulting swipe credits are saved.
+- When the deck is empty, « Revoir les profils passés » brings back the profiles you passed on.
+
+### Compatibility score
+
+`lib/compat.ts` uses a simple weighted formula (each factor 0–1):
+
+| Factor | Weight |
+|---|---|
+| Budget overlap | 25 % |
+| Sleep schedule (bedtime gap + early bird / night owl) | 20 % |
+| Cleanliness | 15 % |
+| Study habits (noise, place, exam season) | 15 % |
+| Shared interests (3 shared = full marks) | 15 % |
+| Guests frequency | 10 % |
+
+Deal-breakers (smoker vs non-smoker, pet vs allergy) multiply the score by 0.8 each.
+The strongest factors become the "top 3 reasons" shown on the full profile.
+
 ## 3. Editing text
 
 Every UI string lives in [`lib/strings.ts`](lib/strings.ts). Colours, fonts, radii and shadows live in

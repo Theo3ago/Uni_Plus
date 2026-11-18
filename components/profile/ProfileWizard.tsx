@@ -7,7 +7,7 @@ import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Chip } from "@/components/ui/Chip";
 import { FieldGroup, inputClass, RangeSlider, Segmented, TextField } from "@/components/ui/Form";
-import { DEMO_MODE } from "@/lib/config";
+import { BUDGET_RANGE, DEMO_MODE } from "@/lib/config";
 import { saveMyProfile } from "@/lib/data/profiles";
 import { sampleMe } from "@/lib/demo/sampleMe";
 import { formatDate, formatMoney, formatTime, todayIso } from "@/lib/format";
@@ -23,7 +23,6 @@ const L = t.labels;
 export type Draft = Omit<Profile, "school"> & { school: SchoolId | null };
 
 export const BIO_MAX = 300;
-export const BUDGET_RANGE = { min: 400, max: 2000, step: 25 };
 const MAX_INTERESTS = 10;
 
 export function emptyDraft(): Draft {

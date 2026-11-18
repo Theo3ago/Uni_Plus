@@ -46,6 +46,17 @@ export function todayIso(timeZone = "America/Toronto"): string {
   );
 }
 
+/** ISO date/time → "18 nov." (adds the year only when it isn't the current one). */
+export function formatShortDate(iso: string): string {
+  const d = new Date(iso);
+  const sameYear = d.getFullYear() === new Date().getFullYear();
+  return new Intl.DateTimeFormat("fr-CA", {
+    day: "numeric",
+    month: "short",
+    ...(sameYear ? {} : { year: "numeric" }),
+  }).format(d);
+}
+
 /** "2027-05-01" → "mai 2027" */
 export function formatMonth(iso: string): string {
   const [y, m] = iso.split("-").map(Number);
