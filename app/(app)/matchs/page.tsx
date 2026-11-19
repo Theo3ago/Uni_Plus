@@ -1,14 +1,16 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- data: URLs / storage URLs */
-import { ChevronRight, Heart, MapPinned, MessageCircle } from "lucide-react";
+import { ChevronRight, FileSignature, Heart, MapPinned, MessageCircle, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ProfileSheet } from "@/components/discover/ProfileSheet";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/States";
 import { computeCompatibility } from "@/lib/compat";
+import { isActive, useHouseholds } from "@/lib/data/households";
 import { useMyProfile } from "@/lib/data/profiles";
+import { isFullySigned } from "@/lib/agreement";
 import { syncFromServer, useMatches, type Match } from "@/lib/data/swipes";
 import { formatShortDate } from "@/lib/format";
 import { SCHOOLS } from "@/lib/schools";
@@ -18,6 +20,8 @@ export default function MatchesPage() {
   const [me] = useMyProfile();
   const [matches] = useMatches();
   const [opened, setOpened] = useState<Match | null>(null);
+  const [households] = useHouseholds();
+  const active = Object.values(households).filter(isActive);
 
   useEffect(() => {
     void syncFromServer().catch(() => undefined);
@@ -41,6 +45,52 @@ export default function MatchesPage() {
           action={<ButtonLink href="/decouvrir">{t.matches.cta}</ButtonLink>}
         />
       ) : (
+        <>
+        {active.length ? (
+          <section className="px-4 pt-4" aria-labelledby="households-h">
+            <h2 id="households-h" className="mb-2 text-lg text-navy">
+              {t.commit.householdsTitle}
+            </h2>
+            <ul className="space-y-3">
+              {active.map((h) => {
+                const signed = Boolean(h.agreement) && isFullySigned(h.signatures, h.members);
+                return (
+                  <li key={h.id} className="rounded-[20px] border border-navy bg-card p-4 shadow-soft">
+                    <div className="flex items-center gap-3">
+                      <span className="flex -space-x-3">
+                        {h.members.map((m) => (
+                          <span key={m.id} className="block h-10 w-10 overflow-hidden rounded-full border-2 border-card bg-navy-50">
+                            {m.photo ? <img src={m.photo} alt="" className="h-full w-full object-cover" /> : null}
+                          </span>
+                        ))}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-display text-lg font-bold text-navy">
+                          {h.members.map((m) => (m.id === me.id ? t.area.you : m.firstName)).join(" + ")}
+                        </span>
+                        <span className="block text-[13px] text-ink-2">{signed ? t.commit.signed : t.commit.draft}</span>
+                      </span>
+                    </div>
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <ButtonLink
+                        href={signed ? `/entente/${h.id}/document` : `/entente/${h.id}`}
+                        variant="dark"
+                        className="min-h-11 text-sm"
+                      >
+                        <FileSignature className="h-4 w-4" aria-hidden />
+                        {t.commit.agreement}
+                      </ButtonLink>
+                      <ButtonLink href={`/depenses/${h.id}`} variant="secondary" className="min-h-11 text-sm">
+                        <Wallet className="h-4 w-4" aria-hidden />
+                        {t.commit.expenses}
+                      </ButtonLink>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ) : null}
         <ul className="space-y-3 px-4 py-4">
           {matches.map((m) => {
             const score = computeCompatibility(me, m.profile).score;
@@ -80,6 +130,7 @@ export default function MatchesPage() {
             );
           })}
         </ul>
+        </>
       )}
 
       <ProfileSheet

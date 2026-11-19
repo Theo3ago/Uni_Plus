@@ -8,7 +8,8 @@
  */
 import { useSyncExternalStore } from "react";
 import { DEMO_MODE } from "../config";
-import { DEMO_OPENER_DELAY_MS, DEMO_REPLY_DELAY_MS, demoOpener, demoReply } from "../demo/replies";
+import { DEMO_OPENER_DELAY_MS, DEMO_REPLY_DELAY_MS, demoOpener, demoReply, wantsToCommit } from "../demo/replies";
+import { demoIncomingCommit } from "./households";
 import { readStored, useStored, writeStored } from "../storage";
 import { getSupabase } from "../supabase/client";
 import type { Match } from "./swipes";
@@ -191,9 +192,15 @@ function simulateReply(match: Match, mine: Message) {
       const theirs = (readStored<Store>(KEY, {})[match.id] ?? []).filter((m) => m.senderId === match.profile.id);
       setTyping(match.id, false);
       upsertLocal(theirMessage(match, demoReply(match.profile, mine.body, theirs.length)));
+      if (wantsToCommit(mine.body)) demoIncomingCommit(match);
     },
     700 + rand(DEMO_REPLY_DELAY_MS.min, DEMO_REPLY_DELAY_MS.max),
   );
+}
+
+/** Demo only: deliver a message from the other person right away. */
+export function deliverDemoMessage(match: Match, body: string) {
+  if (DEMO_MODE) upsertLocal(theirMessage(match, body));
 }
 
 /** Demo only: a new match says hello first, a moment after the match. */

@@ -84,6 +84,24 @@ estimates (clearly labelled « Estimation »), and draws the map with OpenStreet
 Google Maps. Nothing shows an error. Nearby groceries and bus stops need the Google **Places API (New)**; without a
 key that section shows a short note instead. The listings are always fictional and labelled « Exemple ».
 
+### Commitment, roommate agreement and shared expenses
+
+- **« S'engager »:** a banner under the chat header. One roommate sends the request and the other must accept.
+  In demo mode the match accepts after ~2.5 s. If *you* suggest it in the chat (« on se lance comme colocs ? »,
+  « on s'engage ? »), the match replies and sends you a request to accept instead.
+- **Entente de colocation** (`/entente/<id>`): 11 short steps that save automatically: rent split (equal or custom %),
+  utilities and internet, weekly chore rotation table, quiet hours, guests, cleanliness, groceries, pets/smoking,
+  conflict-resolution steps, move-in date and lease length, then review and sign. Defaults come from both
+  profiles (for example, quiet hours start at the earliest bedtime, and pets are set to « Non » if someone is allergic).
+- **Signing:** each roommate types their full name (first and last) and ticks the consent box. A timestamp is saved.
+  In demo mode the match signs ~2.5 s after you. Editing a signed agreement clears the signatures (with a warning).
+- **Final document** (`/entente/<id>/document`): clean printable view with the Uni+ logo, « Imprimer », and
+  « Télécharger en PDF » (generated in the browser with jsPDF, as real selectable text). Every page states that the
+  agreement is **not a legal lease**.
+- **Dépenses partagées** (`/depenses/<id>`): add an expense (who paid, split between whom). Uni+ shows who owes whom
+  using the fewest transfers, and « Marquer comme réglé » records the reimbursement.
+- Committed pairs appear under « Mes colocations » at the top of the Matchs tab.
+
 ## Google Maps API key (optional)
 
 The app works without a key (see above). With one, you get real travel times, the Google basemap and nearby places.

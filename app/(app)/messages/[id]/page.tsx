@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ProfileSheet } from "@/components/discover/ProfileSheet";
+import { CommitBanner } from "@/components/household/CommitBanner";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/States";
 import { computeCompatibility } from "@/lib/compat";
@@ -19,7 +20,9 @@ import {
   type Message,
 } from "@/lib/data/messages";
 import { useMyProfile } from "@/lib/data/profiles";
-import { syncFromServer, useMatches } from "@/lib/data/swipes";
+import { getMatch, syncFromServer, useMatches } from "@/lib/data/swipes";
+import { syncHouseholds } from "@/lib/data/households";
+import { readStored } from "@/lib/storage";
 import { formatClock, formatDayLabel, sameDay } from "@/lib/format";
 import { SCHOOLS } from "@/lib/schools";
 import { t } from "@/lib/strings";
@@ -43,6 +46,11 @@ export default function ChatPage() {
   useEffect(() => {
     void syncFromServer()
       .then(() => syncMessages([id]))
+      .then(() => {
+        const m = getMatch(id);
+        const myself = readStored<Profile | null>("me", null);
+        if (m && myself) return syncHouseholds([m], myself);
+      })
       .catch(() => undefined);
     return subscribeToThread(id);
   }, [id]);
@@ -122,6 +130,8 @@ export default function ChatPage() {
           <Video className="h-5 w-5" aria-hidden />
         </Link>
       </header>
+
+      <CommitBanner match={match} me={me} />
 
       {/* Messages */}
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-live="polite" aria-relevant="additions">

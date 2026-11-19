@@ -27,6 +27,11 @@ export const DEMO_REPLY_DELAY_MS = { min: 1600, max: 2800 };
 /** Delay before a new match sends its first message. */
 export const DEMO_OPENER_DELAY_MS = 2500;
 
+const COMMIT_RE = /s[’']engag|coloc(s)? ensemble|on se lance|entente/i;
+
+/** Demo: the user suggests committing → the other person also sends a « S'engager » request. */
+export const wantsToCommit = (text: string) => COMMIT_RE.test(text);
+
 const RULES: { test: RegExp; reply: (p: Profile) => string }[] = [
   {
     test: /vid[ée]o|appel|facetime|call/i,
@@ -51,7 +56,7 @@ const RULES: { test: RegExp; reply: (p: Profile) => string }[] = [
       `Je dirais ${p.lifestyle.cleanliness}/5 pour la propreté. Un tableau des tâches, ça me va très bien !`,
   },
   {
-    test: /s[’']engager|coloc ensemble|on se lance|entente/i,
+    test: COMMIT_RE,
     reply: () => "Oui ! Je pense qu’on ferait de bons colocs. On s’engage ?",
   },
   {

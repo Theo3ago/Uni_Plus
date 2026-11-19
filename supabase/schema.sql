@@ -120,8 +120,13 @@ create table if not exists public.expenses (
   paid_by      uuid not null references public.profiles (id) on delete cascade,
   description  text not null,
   amount_cents int  not null check (amount_cents > 0),
+  split_among  uuid[] not null default '{}',   -- empty = everyone in the household
+  is_settlement boolean not null default false, -- « Marquer comme réglé » reimbursements
   created_at   timestamptz not null default now()
 );
+-- If you created the table with an earlier version of this file:
+alter table public.expenses add column if not exists split_among uuid[] not null default '{}';
+alter table public.expenses add column if not exists is_settlement boolean not null default false;
 
 -- ════════════════════════════════════════════════════════════════════════════
 -- Row Level Security
@@ -160,6 +165,8 @@ create policy "households: members read" on public.households for select to auth
   using (public.is_household_member(id) or created_by = auth.uid());
 create policy "households: create" on public.households for insert to authenticated
   with check (created_by = auth.uid());
+create policy "households: creator cancels" on public.households for delete to authenticated
+  using (created_by = auth.uid());
 
 create policy "members: read" on public.household_members for select to authenticated
   using (public.is_household_member(household_id));

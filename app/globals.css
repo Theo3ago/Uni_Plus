@@ -112,8 +112,16 @@ h3 {
 }
 
 @media print {
+  @page {
+    margin: 16mm;
+  }
   body {
     background: #fff;
+  }
+  body > div {
+    max-width: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
   .no-print {
     display: none !important;
