@@ -10,6 +10,7 @@ import {
   householdForMatch,
   isActive,
   requestCommit,
+  useHouseholdPolling,
   useHouseholds,
 } from "@/lib/data/households";
 import type { Match } from "@/lib/data/swipes";
@@ -23,6 +24,7 @@ const c = t.commit;
 export function CommitBanner({ match, me }: { match: Match; me: Profile }) {
   const [store] = useHouseholds();
   const h = householdForMatch(store, match.id);
+  useHouseholdPolling([match.id]); // real mode: see requests / acceptance from the other phone
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [busy, setBusy] = useState(false);

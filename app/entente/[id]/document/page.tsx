@@ -9,7 +9,7 @@ import { Logo } from "@/components/brand/Logo";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { EmptyState, Spinner } from "@/components/ui/States";
 import { buildAgreementDocument } from "@/lib/agreementDoc";
-import { agreementOf, isActive, useHouseholds } from "@/lib/data/households";
+import { agreementOf, isActive, useHouseholdPolling, useHouseholds } from "@/lib/data/households";
 import { useMyProfile } from "@/lib/data/profiles";
 import { agreementPdf } from "@/lib/pdf";
 import { t } from "@/lib/strings";
@@ -32,6 +32,7 @@ function Document() {
   const [store] = useHouseholds();
   const h = store[id];
   const [pdfBusy, setPdfBusy] = useState(false);
+  useHouseholdPolling(h ? [h.matchId] : [], 15000);
 
   const doc = useMemo(
     () => (h ? buildAgreementDocument(agreementOf(h), h.members, h.signatures) : null),

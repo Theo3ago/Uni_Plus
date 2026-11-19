@@ -11,7 +11,7 @@ import { Chip } from "@/components/ui/Chip";
 import { FieldGroup, inputClass, Segmented } from "@/components/ui/Form";
 import { EmptyState } from "@/components/ui/States";
 import type { Member } from "@/lib/agreement";
-import { addExpense, isActive, removeExpense, useHouseholds, type Household } from "@/lib/data/households";
+import { addExpense, isActive, removeExpense, useHouseholdPolling, useHouseholds, type Household } from "@/lib/data/households";
 import { useMyProfile } from "@/lib/data/profiles";
 import { balances, settleUp, totalSpent } from "@/lib/expenses";
 import { formatPrice, formatShortDate } from "@/lib/format";
@@ -43,6 +43,7 @@ function Expenses() {
   const [me] = useMyProfile();
   const [store] = useHouseholds();
   const h = store[id];
+  useHouseholdPolling(h ? [h.matchId] : [], 10000);
 
   if (!me) return null;
   if (!h || !isActive(h)) {

@@ -6,6 +6,9 @@ Uni+ is a "Tinder for roommates" prototype for post-secondary students in Kitche
 (UWaterloo, Laurier, Conestoga Doon, Conestoga Waterloo). Built for the French-class pitch
 *Dans l'œil du dragon*. The interface is in Canadian French.
 
+> **Putting it online for your class (real accounts, photo uploads, live chat)?**
+> Follow the step-by-step guide in [SETUP.md](SETUP.md).
+
 **Stack:** Next.js (App Router) · TypeScript · Tailwind CSS v4 · Supabase · Google Maps · Jitsi Meet · framer-motion · lucide-react.
 
 ---
@@ -161,7 +164,9 @@ Every UI string lives in [`lib/strings.ts`](lib/strings.ts). Colours, fonts, rad
    Supabase's built-in email sender is rate-limited (a few emails per hour); for real use, add
    your own SMTP under **Authentication → Emails → SMTP Settings**.
 
-Sign-in flow: `/connexion` sends the magic link → `/auth/callback` finishes sign-in →
+Sign-in: `/connexion` offers **email + password** (recommended: turn off « Confirm email » so no email is sent,
+because Supabase's built-in sender allows only 2 emails per hour) and the **magic link** option.
+Magic-link flow: `/connexion` sends the link → `/auth/callback` finishes sign-in →
 `/bienvenue` (onboarding) if the user has no profile yet, otherwise `/decouvrir`.
 Profile photos are uploaded to the `photos` bucket under `<user-id>/…` when the profile is saved.
 

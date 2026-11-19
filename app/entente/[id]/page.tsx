@@ -25,6 +25,7 @@ import {
   isActive,
   signAgreement,
   updateAgreement,
+  useHouseholdPolling,
   useHouseholds,
   type Household,
 } from "@/lib/data/households";
@@ -689,6 +690,7 @@ function SignStep({ h, agreement, myId }: { h: Household; agreement: Agreement; 
   const [busy, setBusy] = useState(false);
   const mine = h.signatures[myId];
   const allSigned = isFullySigned(h.signatures, h.members);
+  useHouseholdPolling(allSigned ? [] : [h.matchId], 4000); // real mode: wait for the other signature
   const shares = monthlyShares(agreement, h.members);
 
   useEffect(() => {

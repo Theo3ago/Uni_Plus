@@ -77,8 +77,12 @@ function saveCredits(c: Credits) {
   const sb = getSupabase()!;
   void sb.auth.getSession().then(({ data }) => {
     const uid = data.session?.user.id;
+    // .then() is required: Supabase query builders are lazy.
     if (uid)
-      void sb.from("swipe_credits").upsert({ user_id: uid, extra_swipes: c.extra, premium_until: c.premiumUntil });
+      void sb
+        .from("swipe_credits")
+        .upsert({ user_id: uid, extra_swipes: c.extra, premium_until: c.premiumUntil })
+        .then(() => undefined);
   });
 }
 

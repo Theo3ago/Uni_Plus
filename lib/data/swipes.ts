@@ -40,7 +40,12 @@ function addMatchLocally(match: Match) {
 export async function recordSwipe(profile: Profile, liked: boolean): Promise<Match | null> {
   writeStored(SWIPES_KEY, { ...readStored(SWIPES_KEY, {}), [profile.id]: liked ? "like" : "pass" });
   if (!liked) {
-    if (!DEMO_MODE) void getSupabase()!.from("swipes").upsert({ swiper_id: await myId(), target_id: profile.id, liked });
+    // Note: Supabase query builders only execute when awaited (or .then() is called).
+    if (!DEMO_MODE)
+      await getSupabase()!
+        .from("swipes")
+        .upsert({ swiper_id: await myId(), target_id: profile.id, liked: false })
+        .then(() => undefined);
     return null;
   }
 

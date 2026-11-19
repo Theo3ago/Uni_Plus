@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 /**
  * Households (« foyers »): created when one roommate taps « S'engager » and the other accepts.
  * A household holds the roommate agreement, signatures and shared expenses.
@@ -177,10 +178,17 @@ export async function clearSignatures(id: string) {
 }
 
 export async function signAgreement(id: string, memberId: string, name: string): Promise<void> {
+  const mine: Signature = { name: name.trim(), signedAt: now() };
+  let remote: Record<string, Signature> = {};
+  if (!DEMO_MODE) {
+    // Merge with signatures already saved by the other roommates (each phone has its own cache).
+    const { data } = await getSupabase()!.from("agreements").select("signatures").eq("household_id", id).maybeSingle();
+    remote = (data?.signatures as Record<string, Signature>) ?? {};
+  }
   patch(id, (h) => ({
     ...h,
     agreement: agreementOf(h),
-    signatures: { ...h.signatures, [memberId]: { name: name.trim(), signedAt: now() } },
+    signatures: { ...remote, ...h.signatures, [memberId]: mine },
   }));
   await pushAgreement(id);
 
@@ -224,6 +232,29 @@ export async function removeExpense(id: string, expenseId: string): Promise<void
 }
 
 // ── Supabase sync ───────────────────────────────────────────────────────────
+
+/**
+ * Supabase only: keep a household fresh while a screen is open (the other roommate
+ * accepts, signs or adds expenses from their own phone). No-op in demo mode.
+ */
+export function useHouseholdPolling(matchIds: string[], intervalMs = 6000) {
+  const key = matchIds.join(",");
+  useEffect(() => {
+    if (DEMO_MODE || !key) return;
+    let alive = true;
+    const tick = async () => {
+      const me = readStored<Profile | null>("me", null);
+      const matches = readStored<Match[]>("matches", []).filter((m) => key.split(",").includes(m.id));
+      if (alive && me && matches.length) await syncHouseholds(matches, me).catch(() => undefined);
+    };
+    void tick();
+    const timer = setInterval(() => void tick(), intervalMs);
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  }, [key, intervalMs]);
+}
 
 /** Supabase only: refresh households for these matches into the local cache. */
 export async function syncHouseholds(matches: Match[], me: Profile): Promise<void> {

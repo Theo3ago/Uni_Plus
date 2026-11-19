@@ -147,6 +147,7 @@ create policy "profiles: update own" on public.profiles for update to authentica
 
 create policy "swipes: read own" on public.swipes for select to authenticated using (swiper_id = auth.uid());
 create policy "swipes: write own" on public.swipes for insert to authenticated with check (swiper_id = auth.uid());
+create policy "swipes: change own" on public.swipes for update to authenticated using (swiper_id = auth.uid());
 
 create policy "matches: members read" on public.matches for select to authenticated
   using (auth.uid() in (user_a, user_b));

@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/States";
 import { computeCompatibility } from "@/lib/compat";
-import { isActive, useHouseholds } from "@/lib/data/households";
+import { isActive, useHouseholdPolling, useHouseholds } from "@/lib/data/households";
 import { useMyProfile } from "@/lib/data/profiles";
 import { isFullySigned } from "@/lib/agreement";
 import { syncFromServer, useMatches, type Match } from "@/lib/data/swipes";
@@ -22,6 +22,7 @@ export default function MatchesPage() {
   const [opened, setOpened] = useState<Match | null>(null);
   const [households] = useHouseholds();
   const active = Object.values(households).filter(isActive);
+  useHouseholdPolling(matches.map((m) => m.id), 20000);
 
   useEffect(() => {
     void syncFromServer().catch(() => undefined);
