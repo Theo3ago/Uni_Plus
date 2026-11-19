@@ -102,6 +102,15 @@ h3 {
   outline-offset: 2px;
 }
 
+/* Key-less map: soften OpenStreetMap tiles to a near-greyscale basemap. */
+.uniplus-osm .leaflet-tile-pane {
+  filter: grayscale(0.9) contrast(0.85) brightness(1.06);
+}
+.uniplus-osm.leaflet-container {
+  background: #eef1f7;
+  font-family: var(--font-sans);
+}
+
 @media print {
   body {
     background: #fff;

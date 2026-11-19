@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- data: URLs / storage URLs */
-import { ChevronRight, Heart, MessageCircle } from "lucide-react";
+import { ChevronRight, Heart, MapPinned, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ProfileSheet } from "@/components/discover/ProfileSheet";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -88,8 +88,12 @@ export default function MatchesPage() {
         onClose={() => setOpened(null)}
         footer={
           opened ? (
-            <div className="pb-3">
-              <ButtonLink href={`/messages/${opened.id}`} className="h-14 w-full text-base">
+            <div className="flex gap-3 pb-3">
+              <ButtonLink href={`/quartier?avec=${opened.id}`} variant="secondary" className="h-14 flex-1">
+                <MapPinned className="h-5 w-5" aria-hidden />
+                {t.area.short}
+              </ButtonLink>
+              <ButtonLink href={`/messages/${opened.id}`} className="h-14 flex-[1.4] text-base">
                 <MessageCircle className="h-5 w-5" aria-hidden />
                 {t.chat.message}
               </ButtonLink>

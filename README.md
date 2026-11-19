@@ -68,6 +68,45 @@ Things to know about the free public server `meet.jit.si`:
 - For production, set `NEXT_PUBLIC_JITSI_DOMAIN` to your own Jitsi server, or use Jitsi as a Service (JaaS, domain `8x8.vc`, free tier).
 - Camera access requires https (Vercel is https; `localhost` also works).
 
+### Map: « Le meilleur quartier pour vous » (`/quartier`)
+
+Open it from a chat (map button in the header) or from a match's profile (« Meilleur quartier »).
+Pick 1 to 3 matches (2–4 roommates including you).
+
+1. A 5 × 5 grid of candidate points is placed around the roommates' schools (`lib/geo.ts`).
+2. Google computes each roommate's travel time from every candidate to their school, by transit (weekday 8:30)
+   and on foot (`lib/maps/google.ts`). It uses the new **Routes API** (`RouteMatrix`) and falls back to the
+   legacy **Distance Matrix** service if that is what your key has enabled.
+3. The winner minimises `total time + 1.5 × (longest − shortest)`, the fairness penalty (`lib/neighbourhood.ts`).
+
+**Without a key, or if Google fails**, the app uses the midpoint (centroid) of the schools with straight-line
+estimates (clearly labelled « Estimation »), and draws the map with OpenStreetMap tiles via Leaflet instead of
+Google Maps. Nothing shows an error. Nearby groceries and bus stops need the Google **Places API (New)**; without a
+key that section shows a short note instead. The listings are always fictional and labelled « Exemple ».
+
+## Google Maps API key (optional)
+
+The app works without a key (see above). With one, you get real travel times, the Google basemap and nearby places.
+
+1. Go to https://console.cloud.google.com, create a project, and attach a billing account
+   (Google requires one even though there is a free monthly usage tier; set a budget alert under **Billing → Budgets & alerts**).
+2. **APIs & Services → Library**, enable:
+   - **Maps JavaScript API**
+   - **Places API (New)**
+   - **Routes API**
+   - *(optional)* **Distance Matrix API**: only needed if Routes API is unavailable on your project.
+3. **APIs & Services → Credentials → Create credentials → API key.**
+4. Click the key → **Edit** and restrict it (important: a browser key is visible to anyone who opens the site):
+   - **Application restrictions → Websites**, add:
+     - `https://<your-app>.vercel.app/*`
+     - `https://<your-app>-*.vercel.app/*` (Vercel preview deployments, optional)
+     - `http://localhost:3000/*` (local development)
+   - **API restrictions → Restrict key**, tick only the APIs from step 2.
+5. Put the key in `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (`.env.local` locally, and Vercel → Settings → Environment Variables), then redeploy.
+
+If the key is invalid or not allowed on the current domain, Google reports an auth failure and the app switches
+automatically to the key-less map and estimates.
+
 ### Compatibility score
 
 `lib/compat.ts` uses a simple weighted formula (each factor 0–1):

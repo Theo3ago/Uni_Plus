@@ -1,7 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- data: URLs / storage URLs */
-import { ArrowLeft, ArrowUp, Check, CheckCheck, MessageCircle, Video } from "lucide-react";
+import { ArrowLeft, ArrowUp, Check, CheckCheck, MapPinned, MessageCircle, Video } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -107,6 +107,13 @@ export default function ChatPage() {
             </span>
           </span>
         </button>
+        <Link
+          href={`/quartier?avec=${match.id}`}
+          aria-label={t.area.open}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-line bg-card text-navy"
+        >
+          <MapPinned className="h-5 w-5" aria-hidden />
+        </Link>
         <Link
           href={`/appel/${match.id}`}
           aria-label={c.video}
