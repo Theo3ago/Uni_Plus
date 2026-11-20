@@ -566,7 +566,7 @@ export const t = {
     retry: "Recevoir un nouveau lien",
     acceptPrefix: "J’ai lu et j’accepte les ",
     acceptLink: "conditions d’utilisation et la politique de confidentialité",
-    acceptSuffix: ". J’ai 18 ans ou plus, ou 16 ans ou plus avec la permission d’un parent.",
+    acceptSuffix: ". J’ai 16 ans ou plus.",
     mustAccept: "Cochez la case pour accepter les conditions avant de continuer.",
   },
 
@@ -601,7 +601,7 @@ export const t = {
       {
         h: "2. Qui peut utiliser Uni+",
         p: [
-          "Uni+ s’adresse aux étudiant·e·s du postsecondaire de Kitchener-Waterloo. Vous devez avoir 18 ans ou plus, ou 16 ans ou plus avec la permission d’un parent ou tuteur.",
+          "Uni+ s’adresse aux étudiant·e·s du postsecondaire de Kitchener-Waterloo. Vous devez avoir 16 ans ou plus.",
           "Vous devez donner des renseignements exacts sur vous-même et n’avoir qu’un seul compte.",
         ],
       },
