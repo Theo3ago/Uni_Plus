@@ -62,6 +62,15 @@ Sign up for Vercel with your GitHub account. It makes step 6 one click.
 
 > Run this file **once** on a fresh project. Running it a second time shows "already exists" errors. That's harmless,
 > but if anything looks wrong, the quickest fix is to create a new Supabase project and run it once.
+>
+> **Already ran an older copy?** Run just these 3 lines in a new query (newer Supabase projects need them,
+> otherwise sign-up works but saving a profile fails with "permission denied"):
+>
+> ```sql
+> grant usage on schema public to authenticated;
+> grant select, insert, update, delete on all tables in schema public to authenticated;
+> grant usage, select on all sequences in schema public to authenticated;
+> ```
 
 ### 2b. Turn on email + password, without confirmation emails
 

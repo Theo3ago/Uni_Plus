@@ -195,3 +195,11 @@ create policy "photos: upload own" on storage.objects for insert to authenticate
   with check (bucket_id = 'photos' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy "photos: delete own" on storage.objects for delete to authenticated
   using (bucket_id = 'photos' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- ── Table permissions for signed-in users ───────────────────────────────────
+-- Newer Supabase projects no longer grant these automatically. Row Level
+-- Security (above) still decides which rows each user can see or change.
+-- Safe to run again on its own.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+grant usage, select on all sequences in schema public to authenticated;
