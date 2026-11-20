@@ -11,7 +11,11 @@ import { Spinner } from "@/components/ui/States";
 import { DEMO_MODE } from "@/lib/config";
 import { getUserId } from "@/lib/data/auth";
 import { getMyProfile, ME_KEY, useMyProfile } from "@/lib/data/profiles";
-import { useHydrated, writeStored } from "@/lib/storage";
+import { clearAllStored, readStored, removeStored, useHydrated, writeStored } from "@/lib/storage";
+import type { Profile } from "@/lib/types";
+
+/** Which Supabase user the browser cache belongs to. */
+const OWNER_KEY = "owner";
 
 export function FullScreenSpinner() {
   return (
@@ -35,10 +39,29 @@ export function AuthGate({ children, requireProfile = true }: { children: ReactN
       const uid = await getUserId();
       if (!alive) return;
       if (!uid) return router.replace("/connexion");
-      const profile = await getMyProfile().catch(() => null);
+
+      // The browser cache must belong to the signed-in account. It may hold data from
+      // demo mode (same website address) or from another account: start clean.
+      if (readStored<string | null>(OWNER_KEY, null) !== uid) {
+        clearAllStored();
+        writeStored(OWNER_KEY, uid);
+      }
+
+      let profile: Profile | null = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          profile = await getMyProfile();
+          break;
+        } catch {
+          await new Promise((r) => setTimeout(r, 800));
+        }
+      }
       if (!alive) return;
       if (profile) writeStored(ME_KEY, profile);
-      else if (requireProfile) return router.replace("/bienvenue");
+      else {
+        removeStored(ME_KEY);
+        if (requireProfile) return router.replace("/bienvenue");
+      }
       setRemoteReady(true);
     })();
     return () => {

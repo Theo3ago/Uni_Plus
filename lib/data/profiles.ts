@@ -71,7 +71,9 @@ export async function getMyProfile(): Promise<Profile | null> {
   const sb = getSupabase()!;
   const { data: auth } = await sb.auth.getUser();
   if (!auth.user) return null;
-  const { data } = await sb.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
+  const { data, error } = await sb.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
+  // A failed request is not the same as "no profile": never send someone back to onboarding over a network blip.
+  if (error) throw error;
   return data ? fromRow(data as ProfileRow) : null;
 }
 
