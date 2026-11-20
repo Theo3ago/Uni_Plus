@@ -65,11 +65,24 @@ export async function tryAccessCode(code: string): Promise<boolean> {
   return ok;
 }
 
+/** Locks this device again (for testing what classmates see before launch). */
+export function relock() {
+  memoryBypass = false;
+  try {
+    window.localStorage.removeItem(BYPASS_KEY);
+  } catch {
+    /* ignore */
+  }
+  listeners.forEach((fn) => fn());
+}
+
 export interface LaunchState {
   /** False until the browser has checked the time (render a placeholder meanwhile). */
   ready: boolean;
   locked: boolean;
   remainingMs: number;
+  /** Before launch, but this device was unlocked with the access code. */
+  bypassed: boolean;
 }
 
 /** Live countdown state. Demo mode is never locked. */
@@ -95,8 +108,9 @@ export function useLaunch(): LaunchState {
     };
   }, []);
 
-  if (DEMO_MODE) return { ready: true, locked: false, remainingMs: 0 };
-  return { ready: state.ready, locked: state.remainingMs > 0 && !bypass, remainingMs: state.remainingMs };
+  if (DEMO_MODE) return { ready: true, locked: false, remainingMs: 0, bypassed: false };
+  const early = state.remainingMs > 0;
+  return { ready: state.ready, locked: early && !bypass, remainingMs: state.remainingMs, bypassed: early && bypass };
 }
 
 /** Splits milliseconds into days, hours, minutes and seconds. */

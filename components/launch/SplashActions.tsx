@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Countdown } from "@/components/launch/Countdown";
 import { ButtonLink } from "@/components/ui/Button";
 import { DEMO_MODE } from "@/lib/config";
-import { useLaunch } from "@/lib/launch";
+import { relock, useLaunch } from "@/lib/launch";
 import { t } from "@/lib/strings";
 
 /** Splash buttons, replaced by the launch countdown until sign-ups open. */
@@ -24,6 +24,11 @@ export function SplashActions() {
       <ButtonLink href={DEMO_MODE ? "/decouvrir" : "/connexion"} variant="ghost" className="h-12 w-full">
         {t.splash.haveAccount}
       </ButtonLink>
+      {launch.bypassed ? (
+        <button type="button" onClick={relock} className="mx-auto min-h-11 px-3 text-[13px] text-ink-2 underline underline-offset-2">
+          {t.launch.relock}
+        </button>
+      ) : null}
     </>
   );
 }

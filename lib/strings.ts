@@ -50,6 +50,7 @@ export const t = {
     checking: "Vérification…",
     wrongCode: "Code incorrect.",
     cancel: "Annuler",
+    relock: "Remettre le compte à rebours sur cet appareil",
   },
 
   tabs: {
