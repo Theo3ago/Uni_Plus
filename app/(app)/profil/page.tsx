@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Pencil, RotateCcw } from "lucide-react";
+import { FileText, LogOut, Pencil, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { DemoBadge, PageHeader } from "@/components/layout/PageHeader";
 import { PhotoCarousel } from "@/components/profile/PhotoCarousel";
@@ -49,6 +49,10 @@ export default function ProfilePage() {
           {DEMO_MODE ? <RotateCcw className="h-4 w-4" aria-hidden /> : <LogOut className="h-4 w-4" aria-hidden />}
           {DEMO_MODE ? t.profile.resetDemo : t.profile.signOut}
         </Button>
+        <ButtonLink href="/conditions" variant="ghost" className="w-full">
+          <FileText className="h-4 w-4" aria-hidden />
+          {t.legal.profileLink}
+        </ButtonLink>
       </div>
     </>
   );

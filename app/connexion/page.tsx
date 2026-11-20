@@ -34,6 +34,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "busy" | "sent" | "confirm">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [accepted, setAccepted] = useState(false);
+  // Anything that can create an account needs the terms accepted (a magic link creates one for a new email).
+  const needsTerms = tab === "link" || mode === "signup";
 
   // No sign-in in demo mode.
   useEffect(() => {
@@ -46,6 +49,7 @@ export default function LoginPage() {
     const value = email.trim();
     if (!EMAIL_RE.test(value)) return setError(a.invalidEmail);
     if (tab === "password" && password.length < 8) return setError(a.passwordShort);
+    if (needsTerms && !accepted) return setError(a.mustAccept);
     setError(null);
     setStatus("busy");
     try {
@@ -134,6 +138,27 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+          ) : null}
+
+          {needsTerms ? (
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-line bg-card p-4">
+              <input
+                type="checkbox"
+                checked={accepted}
+                onChange={(e) => {
+                  setAccepted(e.target.checked);
+                  if (e.target.checked) setError(null);
+                }}
+                className="mt-0.5 h-6 w-6 shrink-0 cursor-pointer accent-[#13294B]"
+              />
+              <span className="text-sm leading-relaxed text-ink-2">
+                {a.acceptPrefix}
+                <Link href="/conditions" target="_blank" className="font-medium text-navy underline underline-offset-2">
+                  {a.acceptLink}
+                </Link>
+                {a.acceptSuffix}
+              </span>
+            </label>
           ) : null}
 
           <p role="alert" className="min-h-5 text-sm font-medium text-navy">

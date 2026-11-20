@@ -564,6 +564,161 @@ export const t = {
     genericError: "Connexion impossible pour le moment. Vérifiez votre connexion Internet et réessayez.",
     callbackError: "Ce lien a expiré ou a déjà été utilisé.",
     retry: "Recevoir un nouveau lien",
+    acceptPrefix: "J’ai lu et j’accepte les ",
+    acceptLink: "conditions d’utilisation et la politique de confidentialité",
+    acceptSuffix: ". J’ai 18 ans ou plus, ou 16 ans ou plus avec la permission d’un parent.",
+    mustAccept: "Cochez la case pour accepter les conditions avant de continuer.",
+  },
+
+  legal: {
+    title: "Conditions et confidentialité",
+    updated: (date: string) => `Dernière mise à jour : ${date}`,
+    splashNotice: "En continuant, vous acceptez nos ",
+    splashLink: "conditions d’utilisation et notre politique de confidentialité",
+    profileLink: "Conditions et confidentialité",
+    contactFallback: "en personne, auprès du créateur d’Uni+ (en classe)",
+    contactEmail: (email: string) => `par courriel à ${email}`,
+    termsTitle: "Conditions d’utilisation",
+    privacyTitle: "Politique de confidentialité",
+    summaryTitle: "En bref",
+    summary: [
+      "Uni+ est un projet étudiant, pas une entreprise. Il est offert gratuitement, tel quel, sans garantie.",
+      "Votre profil et vos photos sont visibles par les autres utilisateurs connectés. Ne publiez rien que vous ne voulez pas montrer.",
+      "Nous ne vérifions l’identité de personne. Soyez prudent·e avant de rencontrer quelqu’un ou de signer un bail.",
+      "L’entente de colocation n’est pas un bail ni un document juridique.",
+      "Aucun paiement réel : le paiement est une simulation, et aucun numéro de carte n’est envoyé ni conservé.",
+      "Nous ne vendons pas vos données et n’affichons pas de publicité. Vous pouvez demander la suppression de votre compte en tout temps.",
+    ],
+    /** Each section: a heading and its paragraphs. {contact} is replaced at render time. */
+    terms: [
+      {
+        h: "1. Qui sommes-nous",
+        p: [
+          "Uni+ est un prototype créé dans le cadre d’un projet scolaire (cours de français, présentation « Dans l’œil du dragon »). Ce n’est pas une entreprise enregistrée et le service n’a aucun but commercial.",
+          "En créant un compte ou en utilisant Uni+, vous acceptez ces conditions et la politique de confidentialité ci-dessous. Si vous ne les acceptez pas, n’utilisez pas Uni+.",
+        ],
+      },
+      {
+        h: "2. Qui peut utiliser Uni+",
+        p: [
+          "Uni+ s’adresse aux étudiant·e·s du postsecondaire de Kitchener-Waterloo. Vous devez avoir 18 ans ou plus, ou 16 ans ou plus avec la permission d’un parent ou tuteur.",
+          "Vous devez donner des renseignements exacts sur vous-même et n’avoir qu’un seul compte.",
+        ],
+      },
+      {
+        h: "3. Votre compte",
+        p: [
+          "Vous êtes responsable de votre mot de passe et de ce qui se fait avec votre compte. Choisissez un mot de passe que vous n’utilisez nulle part ailleurs.",
+          "Si vous pensez que quelqu’un utilise votre compte, contactez-nous {contact}.",
+        ],
+      },
+      {
+        h: "4. Ce que vous publiez",
+        p: [
+          "Vous restez propriétaire de vos photos, de votre profil et de vos messages. Vous nous donnez seulement la permission de les conserver et de les afficher dans Uni+ pour faire fonctionner le service.",
+          "Publiez uniquement des photos de vous-même, que vous avez le droit d’utiliser. Il est interdit de publier : la photo ou l’identité d’une autre personne, de la nudité ou du contenu sexuel, du contenu haineux, menaçant ou harcelant, des renseignements personnels d’autrui, de la publicité ou des arnaques.",
+          "Nous pouvons retirer du contenu ou fermer un compte qui ne respecte pas ces règles, sans préavis.",
+        ],
+      },
+      {
+        h: "5. Respect et sécurité",
+        p: [
+          "Traitez les autres avec respect. Le harcèlement, les menaces et la discrimination ne sont pas tolérés.",
+          "Uni+ ne vérifie pas l’identité, l’âge, les antécédents ni la solvabilité des utilisateurs. Le score de compatibilité est une simple estimation basée sur les réponses de chacun.",
+          "Avant de vous engager : faites un appel vidéo, rencontrez-vous d’abord dans un lieu public, visitez le logement en personne et ne versez jamais d’argent à quelqu’un que vous n’avez pas rencontré. Signalez tout comportement inquiétant {contact}. En cas de danger, composez le 911.",
+        ],
+      },
+      {
+        h: "6. Paiements",
+        p: [
+          "Uni+ ne vend rien. Les forfaits et le paiement sont une simulation affichée « MODE DÉMO » : aucun paiement réel n’est effectué, et les numéros de carte saisis ne sont ni envoyés, ni conservés, ni enregistrés. Utilisez uniquement la carte de test.",
+        ],
+      },
+      {
+        h: "7. Entente de colocation",
+        p: [
+          "L’entente de colocation et son PDF servent à organiser la vie commune entre colocs. Ce n’est pas un bail, ni un contrat juridique, ni un conseil juridique, et Uni+ n’y est pas partie.",
+          "Pour un bail en Ontario, utilisez le bail type de l’Ontario avec votre propriétaire. Pour vos droits de locataire, renseignez-vous auprès de la Commission de la location immobilière de l’Ontario ou de la clinique juridique de votre école.",
+        ],
+      },
+      {
+        h: "8. Services d’autres entreprises",
+        p: [
+          "Les appels vidéo passent par Jitsi Meet (meet.jit.si), la carte utilise OpenStreetMap ou Google Maps, et les annonces de logement affichées sont des exemples fictifs. Ces services ont leurs propres conditions; Uni+ n’en est pas responsable.",
+        ],
+      },
+      {
+        h: "9. Aucune garantie",
+        p: [
+          "Uni+ est un prototype offert « tel quel ». Il peut contenir des erreurs, être interrompu ou être supprimé à tout moment, et des données peuvent être perdues.",
+          "Dans toute la mesure permise par la loi, le créateur d’Uni+ n’est pas responsable des dommages découlant de l’utilisation du service, des rencontres ou des relations entre utilisateurs, ni des ententes, baux, paiements ou conflits entre colocs.",
+        ],
+      },
+      {
+        h: "10. Fermeture du compte",
+        p: [
+          "Vous pouvez arrêter d’utiliser Uni+ et demander la suppression de votre compte en tout temps {contact}. Nous pouvons suspendre un compte qui enfreint ces conditions. Uni+ sera fermé et ses données supprimées à la fin du projet.",
+        ],
+      },
+      {
+        h: "11. Modifications et droit applicable",
+        p: [
+          "Ces conditions peuvent changer; la date en haut de la page indique la dernière version. Continuer d’utiliser Uni+ après un changement signifie que vous l’acceptez.",
+          "Ces conditions sont régies par les lois de l’Ontario et les lois fédérales du Canada qui s’y appliquent.",
+        ],
+      },
+    ],
+    privacy: [
+      {
+        h: "Ce que nous recueillons",
+        p: [
+          "Votre courriel et votre mot de passe (le mot de passe est chiffré par notre fournisseur; nous ne pouvons pas le lire).",
+          "Votre profil : prénom, âge, école, programme, année, bio, photos, intérêts, habitudes d’étude et de vie, budget et date d’emménagement.",
+          "Votre activité : profils aimés ou passés, matchs, messages, demandes d’engagement, ententes de colocation (dont le nom complet saisi pour signer) et dépenses partagées.",
+          "Nous ne recueillons pas votre position GPS, vos contacts ni vos données de paiement.",
+        ],
+      },
+      {
+        h: "Qui peut voir quoi",
+        p: [
+          "Votre profil et vos photos sont visibles par tous les utilisateurs connectés d’Uni+. Les photos sont stockées à des adresses Web publiques : toute personne qui possède le lien d’une photo peut l’ouvrir.",
+          "Vos messages sont visibles seulement par vous et la personne avec qui vous avez un match. Une entente et les dépenses sont visibles seulement par les colocs concernés.",
+          "Le créateur d’Uni+ peut accéder aux données pour faire fonctionner le projet, corriger des problèmes ou traiter un signalement.",
+        ],
+      },
+      {
+        h: "Pourquoi nous les utilisons",
+        p: [
+          "Uniquement pour faire fonctionner Uni+ : afficher les profils, calculer la compatibilité, créer les matchs, transmettre les messages et préparer les ententes. Pas de publicité, pas de vente ni de partage de vos données à des fins commerciales.",
+        ],
+      },
+      {
+        h: "Où elles sont conservées",
+        p: [
+          "Les données sont hébergées par Supabase (base de données et photos) et le site par Vercel. Ces fournisseurs peuvent stocker les données à l’extérieur du Canada, par exemple aux États-Unis, où elles peuvent être soumises aux lois locales.",
+          "Une copie de vos données est aussi gardée dans le navigateur de votre appareil pour que l’application reste rapide; elle est effacée quand vous vous déconnectez.",
+          "Les appels vidéo se font directement sur Jitsi Meet; Uni+ ne les enregistre pas.",
+        ],
+      },
+      {
+        h: "Combien de temps",
+        p: [
+          "Jusqu’à ce que vous demandiez la suppression de votre compte, et au plus tard jusqu’à la fin du projet scolaire, après quoi toutes les données seront supprimées.",
+        ],
+      },
+      {
+        h: "Vos droits",
+        p: [
+          "Vous pouvez consulter et corriger votre profil à tout moment dans l’onglet Profil. Vous pouvez demander une copie de vos données ou la suppression de votre compte et de toutes vos données {contact}. Nous y donnerons suite dans un délai raisonnable.",
+        ],
+      },
+      {
+        h: "Sécurité",
+        p: [
+          "Les échanges sont chiffrés (https) et des règles d’accès empêchent un utilisateur de lire les messages ou les ententes des autres. Aucun système n’est parfaitement sûr : ne partagez pas d’information sensible (numéro d’assurance sociale, coordonnées bancaires, etc.) dans Uni+.",
+        ],
+      },
+    ],
   },
 
   onboarding: {

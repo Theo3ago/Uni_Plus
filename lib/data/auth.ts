@@ -1,12 +1,15 @@
 "use client";
 
-import { DEMO_MODE } from "../config";
+import { DEMO_MODE, TERMS_VERSION } from "../config";
 import { clearAllStored } from "../storage";
 import { getSupabase } from "../supabase/client";
 
 export const DEMO_USER_ID = "me";
 
 /** Current user id: "me" in demo mode, the Supabase auth uid otherwise (null if signed out). */
+/** Saved on the new account (Supabase user metadata) as a record of which terms were accepted, and when. */
+const termsAcceptance = () => ({ terms_version: TERMS_VERSION, terms_accepted_at: new Date().toISOString() });
+
 export async function getUserId(): Promise<string | null> {
   if (DEMO_MODE) return DEMO_USER_ID;
   const { data } = await getSupabase()!.auth.getSession();
@@ -18,7 +21,8 @@ export async function sendMagicLink(email: string): Promise<void> {
   if (!sb) return;
   const { error } = await sb.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    // `data` only applies when this link creates a new account.
+    options: { emailRedirectTo: `${window.location.origin}/auth/callback`, data: termsAcceptance() },
   });
   if (error) throw error;
 }
@@ -40,7 +44,7 @@ export async function passwordAuth(mode: "signin" | "signup", email: string, pas
   const { data, error } = await sb.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    options: { emailRedirectTo: `${window.location.origin}/auth/callback`, data: termsAcceptance() },
   });
   if (error) throw error;
   // Supabase returns a fake user with no identities when the email is already registered.

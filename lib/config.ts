@@ -29,6 +29,12 @@ export const HAS_MAPS_KEY = Boolean(GOOGLE_MAPS_API_KEY);
 
 export const JITSI_DOMAIN = process.env.NEXT_PUBLIC_JITSI_DOMAIN || "meet.jit.si";
 
+/** Version of the terms shown at /conditions (stored with each new account). Change it when the terms change. */
+export const TERMS_VERSION = "2026-11-20";
+
+/** Where users send questions and deletion requests. Empty → "in person, in class". */
+export const CONTACT_EMAIL = "";
+
 /** Free swipes per day (resets at midnight, America/Toronto). */
 export const FREE_SWIPES_PER_DAY = 12;
 export const APP_TIMEZONE = "America/Toronto";

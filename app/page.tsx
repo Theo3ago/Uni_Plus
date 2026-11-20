@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { DemoBadge } from "@/components/layout/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
@@ -28,6 +29,13 @@ export default function SplashPage() {
         <ButtonLink href={DEMO_MODE ? "/decouvrir" : "/connexion"} variant="ghost" className="h-12 w-full">
           {t.splash.haveAccount}
         </ButtonLink>
+        <p className="mt-1 text-center text-xs leading-relaxed text-ink-2">
+          {t.legal.splashNotice}
+          <Link href="/conditions" className="font-medium text-navy underline underline-offset-2">
+            {t.legal.splashLink}
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );
