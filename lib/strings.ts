@@ -40,6 +40,18 @@ export const t = {
     schoolsLine: "UWaterloo · Laurier · Conestoga",
   },
 
+  launch: {
+    opensIn: "Ouverture dans",
+    when: "Lundi 23 novembre à 11 h 35",
+    units: { d: "jours", h: "heures", m: "min", s: "sec" },
+    haveCode: "J’ai un code d’accès",
+    codeLabel: "Code d’accès",
+    unlock: "Déverrouiller",
+    checking: "Vérification…",
+    wrongCode: "Code incorrect.",
+    cancel: "Annuler",
+  },
+
   tabs: {
     discover: "Découvrir",
     matches: "Matchs",

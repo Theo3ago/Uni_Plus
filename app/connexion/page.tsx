@@ -11,6 +11,7 @@ import { TextField } from "@/components/ui/Form";
 import { DEMO_MODE } from "@/lib/config";
 import { passwordAuth, sendMagicLink } from "@/lib/data/auth";
 import { getMyProfile } from "@/lib/data/profiles";
+import { useLaunch } from "@/lib/launch";
 import { t } from "@/lib/strings";
 
 const a = t.auth;
@@ -38,11 +39,14 @@ export default function LoginPage() {
   // Anything that can create an account needs the terms accepted (a magic link creates one for a new email).
   const needsTerms = tab === "link" || mode === "signup";
 
-  // No sign-in in demo mode.
+  const launch = useLaunch();
+
+  // No sign-in in demo mode; before launch (without the access code) → back to the countdown.
   useEffect(() => {
     if (DEMO_MODE) router.replace("/bienvenue");
-  }, [router]);
-  if (DEMO_MODE) return <FullScreenSpinner />;
+    else if (launch.ready && launch.locked) router.replace("/");
+  }, [router, launch.ready, launch.locked]);
+  if (DEMO_MODE || !launch.ready || launch.locked) return <FullScreenSpinner />;
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
