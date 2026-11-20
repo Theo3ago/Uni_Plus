@@ -13,7 +13,7 @@ import { DEMO_MODE } from "./config";
 /** Monday 23 November 2026, 11:35 Toronto time (EST, UTC−5). */
 export const LAUNCH_AT = new Date("2026-11-23T11:35:00-05:00").getTime();
 
-const CODE_SHA256 = "da27a3eee1dbc583e733d9fe6036aaf913da7f900240110e750fcb3c7e65db4b";
+const CODE_SHA256 = "2a390f4207f0ee16d69f130304f1892c3e213f3ef6348fb500327809648640d8";
 // Not "uniplus:"-prefixed, so signing out (which clears that prefix) keeps the device unlocked.
 const BYPASS_KEY = "uniplus-launch-unlocked";
 
