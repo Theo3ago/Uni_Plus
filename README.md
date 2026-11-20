@@ -28,14 +28,16 @@ use your browser's device toolbar at 390 px to see the phone layout.
 
 ## 2. Demo mode (default)
 
-`NEXT_PUBLIC_DEMO_MODE=true` (or simply leaving it unset) runs the whole app with **no backend**:
+The Supabase project URL and publishable key are built into [`lib/config.ts`](lib/config.ts) (both are public
+values), so the app uses the real backend by default with no environment variables.
+`NEXT_PUBLIC_DEMO_MODE=true` switches to demo mode, which runs the whole app with **no backend**:
 
 - 20 fictional, illustrated profiles across the 4 schools (`lib/demo/profiles.ts`)
 - everything you do is saved in the browser's `localStorage`
 - no requests are made to Supabase
 
-To use the real backend, set `NEXT_PUBLIC_DEMO_MODE=false` **and** fill in the Supabase keys.
-If the Supabase keys are missing, demo mode stays on automatically so the presentation can't break.
+To point at a different Supabase project, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+(they override the built-in values). Never put a secret / service_role key in the code.
 
 ### Demo tips for the presentation
 

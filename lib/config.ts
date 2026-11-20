@@ -1,16 +1,25 @@
 /**
- * Runtime configuration, read from public environment variables.
+ * Runtime configuration.
  *
- * Demo mode is ON unless NEXT_PUBLIC_DEMO_MODE is explicitly "false".
- * It is also forced on when the Supabase keys are missing, so the app can never
- * end up half-configured during a live presentation.
+ * The Supabase project URL and publishable key are written here directly so the
+ * deployed site works without any Vercel environment variables. Both values are
+ * public by design (they ship to every browser); access is controlled by the
+ * Row Level Security policies in supabase/schema.sql. Never put a secret key here.
+ *
+ * Environment variables, when set, still take precedence:
+ * - NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY: another Supabase project
+ * - NEXT_PUBLIC_DEMO_MODE="true": force demo mode (no backend, seeded profiles)
+ * Demo mode is also forced on if the Supabase values are empty.
  */
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+const DEFAULT_SUPABASE_URL = "https://bqmjgcpnyjsebxjrgkts.supabase.co";
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2rjM0wTJiz0EoVx-gThPGQ_NZG9cocd";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY;
 
 export const HAS_SUPABASE = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE !== "false" || !HAS_SUPABASE;
+export const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || !HAS_SUPABASE;
 
 export const SUPABASE_URL = supabaseUrl;
 export const SUPABASE_ANON_KEY = supabaseAnonKey;

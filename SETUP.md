@@ -121,7 +121,11 @@ send any email.
 
 1. On https://vercel.com/new click **Import** next to your `uni-plus` GitHub repository.
 2. Framework: **Next.js** (detected automatically). Leave the build settings as they are.
-3. Open **Environment Variables** and add:
+3. **Environment variables are optional for this project:** the Supabase URL and publishable key are already
+   written in [`lib/config.ts`](lib/config.ts), so you can skip this and click **Deploy**. (If you ever use a
+   different Supabase project, change those two lines, or add the variables below.)
+
+   Variables you *can* add:
 
    | Name | Value |
    |---|---|
