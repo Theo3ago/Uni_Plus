@@ -18,7 +18,12 @@ const clean = (s: string) =>
   s
     .replace(/[  ]/g, " ")
     .replace(/[’‘]/g, "'")
-    .replace(/[“”]/g, '"');
+    .replace(/[“”]/g, '"')
+    // Emoji and other characters the built-in fonts can't draw would print as garbage
+    // (e.g. "Ø=Þ"): drop them, then tidy the spaces they leave behind.
+    .replace(/[^\u0000-ÿŒœŠšŸŽžƒˆ˜–—‚„†-•…‰‹›€™]/gu, "")
+    .replace(/ {2,}/g, " ")
+    .trim();
 
 /** House + plus, scaled from the 200×200 SVG logo. */
 function drawLogo(doc: JsPDF, x: number, y: number, size: number) {
